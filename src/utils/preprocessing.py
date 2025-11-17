@@ -292,6 +292,7 @@ def save_dataframe(df, output_path):
     
     
 
+# Preprocessing Pipeline documentation and return df clean  
 
 def data_preprcessing(data):
     Data = convert_to_numeric(Data, "TotalCharges", fill_method='median')
@@ -299,6 +300,7 @@ def data_preprcessing(data):
     df_processed = encode_categorical_features(Data)
     df_clean= cap_outliers_for_columns(df_processed, columns=cols_to_cap)
     save_dataframe(df_clean, r"..\data\preprocessed_data.csv")
+    return df_clean
    
     
     
