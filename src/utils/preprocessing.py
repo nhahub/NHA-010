@@ -84,16 +84,33 @@ def encode_categorical_features(df):
         df_processed[col] = le.fit_transform(df_processed[col])
         label_encoders[col] = le
 
+    
     # -------- 2️⃣ One-Hot Encode Multi-category Columns --------
     categorical_cols = df_processed.select_dtypes(include=['object']).columns.tolist()
-
+    
     if categorical_cols:
         df_processed = pd.get_dummies(df_processed, columns=categorical_cols, drop_first=True)
         
+    
     df_processed.replace({True:1, False:0})
 
     return df_processed, label_encoders
 
+
+
+def encode_categorical_features_api(df):
+    """
+    One-hot encode ALL categorical columns without dropping any category.
+    """
+    df_processed = df.copy()
+
+    categorical_cols = df_processed.select_dtypes(include=['object']).columns
+
+    if len(categorical_cols) > 0:
+        df_processed = pd.get_dummies(df_processed, columns=categorical_cols, drop_first=False)
+        
+
+    return df_processed, None
 
 ## Outliers
 
@@ -217,14 +234,8 @@ def cap_outliers_for_columns(df, columns=["tenure", "MonthlyCharges", "TotalChar
             "total_outliers": total_outliers
         })
 
-    summary_df = pd.DataFrame(summary_records)
 
-    if verbose:
-        print("\n📌 Outlier Capping Summary:")
-        print(summary_df.to_string(index=False))
-        print("\n✔ Outliers capped successfully for the selected columns.\n")
-
-    return df_clean, summary_df
+    return df_clean
 
 
 
@@ -294,13 +305,33 @@ def save_dataframe(df, output_path):
 
 # Preprocessing Pipeline documentation and return df clean  
 
-def data_preprcessing(data):
-    Data = convert_to_numeric(Data, "TotalCharges", fill_method='median')
-    Data = drop_column(Data, "customerID")
-    df_processed = encode_categorical_features(Data)
-    df_clean= cap_outliers_for_columns(df_processed, columns=cols_to_cap)
-    save_dataframe(df_clean, r"..\data\preprocessed_data.csv")
+import pandas as pd
+
+def data_preprocessing(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Full preprocessing step used by the API:
+      - convert TotalCharges to numeric and fill missing
+      - drop customerID
+      - encode categoricals
+      - cap outliers
+    Returns a cleaned, fully numeric DataFrame (no saving to disk).
+    """
+
+    # 1) Fix TotalCharges
+    df = convert_to_numeric(df, "TotalCharges", fill_method='median')
+
+    # 2) Drop ID column if exists
+    df = drop_column(df, "customerID")
+
+    # 3) Encode categorical features
+    # Make sure your encode_categorical_features returns (df_encoded, label_encoders)
+    df_encoded, _ = encode_categorical_features(df)
+
+    # 4) Cap outliers for numeric columns
+    cols_to_cap = ["tenure", "MonthlyCharges", "TotalCharges"]  # or whatever you used
+    df_clean, _ = cap_outliers_for_columns(df_encoded, columns=cols_to_cap, factor=1.5, verbose=False)
+
     return df_clean
-   
+
     
     

@@ -5,8 +5,14 @@ def add_tenure_bucket(df, tenure_col="tenure", new_col="NEW_TENURE_YEAR"):
     """
     Create tenure bucket feature like:
     0-1 Year, 1-2 Year, ..., 5-6 Year
+    If tenure column is missing, returns df unchanged (no error).
     """
     new_df = df.copy()
+
+    if tenure_col not in new_df.columns:
+        # nothing we can do; just return as is
+        print(f"⚠️ Column '{tenure_col}' not found – skipping tenure bucket feature.")
+        return new_df
 
     new_df.loc[(new_df[tenure_col] >= 0) & (new_df[tenure_col] <= 12), new_col] = "0-1 Year"
     new_df.loc[(new_df[tenure_col] > 12) & (new_df[tenure_col] <= 24), new_col] = "1-2 Year"
@@ -18,17 +24,20 @@ def add_tenure_bucket(df, tenure_col="tenure", new_col="NEW_TENURE_YEAR"):
     return new_df
 
 
-def add_no_protection_flag(df):
+def add_no_protection_flag(df: pd.DataFrame) -> pd.DataFrame:
     """
-    NEW_noProt = no OnlineBackup, no DeviceProtection, no TechSupport
-    (expects one-hot encoded *_Yes columns)
+    NEW_noProt = 1 if there is no OnlineBackup, no DeviceProtection,
+    and no TechSupport. If any of the expected *_Yes columns are missing,
+    we create them as 0 so we don't crash.
     """
     new_df = df.copy()
 
     required_cols = ["OnlineBackup_Yes", "DeviceProtection_Yes", "TechSupport_Yes"]
+
     for col in required_cols:
         if col not in new_df.columns:
-            raise KeyError(f"Required column '{col}' not found for NEW_noProt.")
+            print(f"⚠️ Column '{col}' not found – assuming 0 for NEW_noProt.")
+            new_df[col] = 0
 
     new_df["NEW_noProt"] = (
         (new_df["OnlineBackup_Yes"] == 0) &
@@ -39,18 +48,21 @@ def add_no_protection_flag(df):
     return new_df
 
 
-def add_engagement_flags(df):
+def add_engagement_flags(df: pd.DataFrame) -> pd.DataFrame:
     """
     NEW_Engaged: 1- or 2-year contracts
     NEW_Young_Not_Engaged: not engaged & not senior
-    (expects Contract_One year, Contract_Two year, SeniorCitizen)
+
+    If Contract_One year / Contract_Two year / SeniorCitizen are missing,
+    we create them with 0 so the function does not raise errors.
     """
     new_df = df.copy()
 
     needed = ["Contract_One year", "Contract_Two year", "SeniorCitizen"]
     for col in needed:
         if col not in new_df.columns:
-            raise KeyError(f"Required column '{col}' not found for engagement flags.")
+            print(f"⚠️ Column '{col}' not found – assuming 0 for engagement flags.")
+            new_df[col] = 0
 
     new_df["NEW_Engaged"] = (
         (new_df["Contract_One year"] == 1) |
@@ -65,16 +77,18 @@ def add_engagement_flags(df):
     return new_df
 
 
-def add_streaming_flag(df):
+def add_streaming_flag(df: pd.DataFrame) -> pd.DataFrame:
     """
-    NEW_FLAG_ANY_STREAMING = 1 if StreamingTV_Yes == 1 or StreamingMovies_Yes == 1
+    NEW_FLAG_ANY_STREAMING = 1 if StreamingTV_Yes == 1 or StreamingMovies_Yes == 1.
+    If those dummy columns are missing, they are created with 0.
     """
     new_df = df.copy()
 
     needed = ["StreamingTV_Yes", "StreamingMovies_Yes"]
     for col in needed:
         if col not in new_df.columns:
-            raise KeyError(f"Required column '{col}' not found for streaming flag.")
+            print(f"⚠️ Column '{col}' not found – assuming 0 for streaming flag.")
+            new_df[col] = 0
 
     new_df["NEW_FLAG_ANY_STREAMING"] = (
         (new_df["StreamingTV_Yes"] == 1) |
@@ -84,10 +98,11 @@ def add_streaming_flag(df):
     return new_df
 
 
-def add_auto_payment_flag(df):
+def add_auto_payment_flag(df: pd.DataFrame) -> pd.DataFrame:
     """
-    NEW_FLAG_AutoPayment = 1 if Credit card (automatic) or Bank transfer (automatic)
-    one-hot columns are 1.
+    NEW_FLAG_AutoPayment = 1 if Credit card (automatic) or
+    Bank transfer (automatic) dummy columns are 1.
+    If none of those columns exist, we set NEW_FLAG_AutoPayment = 0.
     """
     new_df = df.copy()
 
@@ -98,64 +113,58 @@ def add_auto_payment_flag(df):
     auto_cols = [c for c in auto_cols if c in new_df.columns]
 
     if not auto_cols:
-        raise KeyError("No automatic payment columns found for NEW_FLAG_AutoPayment.")
+        print("⚠️ No automatic payment columns found – setting NEW_FLAG_AutoPayment = 0.")
+        new_df["NEW_FLAG_AutoPayment"] = 0
+        return new_df
 
     new_df["NEW_FLAG_AutoPayment"] = (new_df[auto_cols].sum(axis=1) > 0).astype(int)
 
     return new_df
 
-
-def add_service_agg_features(df):
+def add_service_agg_features(df: pd.DataFrame) -> pd.DataFrame:
     """
     NEW_TotalServices: count of *_Yes one-hot columns
     NEW_AVG_Service_Fee: MonthlyCharges / (NEW_TotalServices + 1)
+
+    If no *_Yes columns exist, we set NEW_TotalServices = 0.
+    If MonthlyCharges is missing, we set NEW_AVG_Service_Fee = 0.
     """
     new_df = df.copy()
 
     yes_cols = [c for c in new_df.columns if c.endswith("_Yes")]
     if not yes_cols:
-        raise ValueError("No *_Yes columns found to compute NEW_TotalServices.")
-
-    if "NEW_TotalServices" not in new_df.columns:
-        new_df["NEW_TotalServices"] = new_df[yes_cols].sum(axis=1)
+        print("⚠️ No *_Yes columns found – setting NEW_TotalServices = 0.")
+        new_df["NEW_TotalServices"] = 0
+    else:
+        if "NEW_TotalServices" not in new_df.columns:
+            new_df["NEW_TotalServices"] = new_df[yes_cols].sum(axis=1)
 
     if "MonthlyCharges" not in new_df.columns:
-        raise KeyError("Column 'MonthlyCharges' is required for NEW_AVG_Service_Fee.")
+        print("⚠️ 'MonthlyCharges' not found – setting NEW_AVG_Service_Fee = 0.")
+        new_df["NEW_AVG_Service_Fee"] = 0
+    else:
+        new_df["NEW_AVG_Service_Fee"] = new_df["MonthlyCharges"] / (
+            new_df["NEW_TotalServices"] + 1
+        )
 
-    new_df["NEW_AVG_Service_Fee"] = new_df["MonthlyCharges"] / (
-        new_df["NEW_TotalServices"] + 1
-    )
+    # 🔧 Ensure numeric dtype for the model
+    new_df["NEW_TotalServices"] = pd.to_numeric(
+        new_df["NEW_TotalServices"], errors="coerce"
+    ).fillna(0).astype(float)
+
+    new_df["NEW_AVG_Service_Fee"] = pd.to_numeric(
+        new_df["NEW_AVG_Service_Fee"], errors="coerce"
+    ).fillna(0.0)
 
     return new_df
 
 
 
-
-
-
-
-# Full feature-engineering pipeline
-
-def engineer_telco_features(df, output_path=r"..\data\extended_featured_data.csv", save=True):
+def feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Full feature-engineering pipeline for Telco dataset on an already
-    preprocessed / encoded dataframe.
-
-    Steps:
-      - tenure buckets (NEW_TENURE_YEAR)
-      - NEW_noProt
-      - NEW_Engaged, NEW_Young_Not_Engaged
-      - NEW_FLAG_ANY_STREAMING
-      - NEW_FLAG_AutoPayment
-      - NEW_TotalServices, NEW_AVG_Service_Fee
-      - optionally save to CSV
-
-    Returns
-    -------
-    new_features : pandas.DataFrame
-        DataFrame with additional engineered features.
+    Full feature-engineering pipeline for Telco dataset
+    on an already preprocessed / encoded dataframe.
     """
-
     new_features = df.copy()
 
     # 1) tenure buckets
@@ -175,11 +184,5 @@ def engineer_telco_features(df, output_path=r"..\data\extended_featured_data.csv
 
     # 6) aggregated service features
     new_features = add_service_agg_features(new_features)
-
-    # 7) save to CSV if requested
-    if save:
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        new_features.to_csv(output_path, index=False)
-        print(f"✅ Extended feature data saved to: {output_path}")
 
     return new_features
