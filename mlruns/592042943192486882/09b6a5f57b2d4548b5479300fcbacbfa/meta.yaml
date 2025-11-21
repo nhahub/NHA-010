@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/UTD/Desktop/DEPI_PROJECT_FINAL/NHA-010/testing_artifacts/09b6a5f57b2d4548b5479300fcbacbfa/artifacts
+end_time: 1763605360550
+entry_point_name: ''
+experiment_id: '592042943192486882'
+lifecycle_stage: active
+run_id: 09b6a5f57b2d4548b5479300fcbacbfa
+run_name: XGBoost Run
+run_uuid: 09b6a5f57b2d4548b5479300fcbacbfa
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763605358066
+status: 3
+tags: []
+user_id: UTD

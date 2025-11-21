@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/UTD/Desktop/DEPI_PROJECT_FINAL/NHA-010/testing_artifacts/1cf159fa79e8419eb18d6aa30b694a0d/artifacts
+end_time: 1763736525646
+entry_point_name: ''
+experiment_id: '760091463076818460'
+lifecycle_stage: active
+run_id: 1cf159fa79e8419eb18d6aa30b694a0d
+run_name: GradientBoosting Run
+run_uuid: 1cf159fa79e8419eb18d6aa30b694a0d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763736519099
+status: 3
+tags: []
+user_id: UTD

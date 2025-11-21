@@ -1,0 +1,10 @@
+artifact_location: file:///C:/Users/UTD/Desktop/DEPI_PROJECT_FINAL/NHA-010/testing_artifacts
+creation_time: 1763599796153
+experiment_id: '907903906503660344'
+last_update_time: 1763603968620
+lifecycle_stage: deleted
+name: DecisionTree Experiments 1
+tags:
+  env: dev
+  mlflow.experimentKind: custom_model_development
+  version: 1.0.0

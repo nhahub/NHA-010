@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/UTD/Desktop/DEPI_PROJECT_FINAL/NHA-010/testing_artifacts/3852ffbcdd5f470bb289d1b32f0bd8b2/artifacts
+deleted_time: 1763606386237
+end_time: 1763605506698
+entry_point_name: ''
+experiment_id: '306432246057942983'
+lifecycle_stage: deleted
+run_id: 3852ffbcdd5f470bb289d1b32f0bd8b2
+run_name: DecisionTree Run
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763605503089
+status: 3
+tags: []
+user_id: UTD

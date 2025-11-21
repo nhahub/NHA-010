@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/UTD/Desktop/DEPI_PROJECT_FINAL/NHA-010/testing_artifacts/8ac7175fe2e44fa8bcd5a52a90e845ef/artifacts
+deleted_time: 1763605590984
+end_time: 1763605357937
+entry_point_name: ''
+experiment_id: '481676210698221863'
+lifecycle_stage: deleted
+run_id: 8ac7175fe2e44fa8bcd5a52a90e845ef
+run_name: LogisticRegression Run
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1763605355696
+status: 3
+tags: []
+user_id: UTD
