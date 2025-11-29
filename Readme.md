@@ -129,7 +129,7 @@ NHA-010/
 
 ### Installation
 
-```bash
+
 # 1. Clone the repository
 git clone https://github.com/nhahub/NHA-010.git
 cd NHA-010
