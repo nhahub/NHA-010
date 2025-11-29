@@ -70,7 +70,7 @@ The goal of this project is to:
 ## Repository Structure
 
 > Adjust this section if your actual structure differs.
-
+```
 NHA-010/
 ├── api/                     # Backend API for model inference
 ├── data/
@@ -91,6 +91,7 @@ NHA-010/
 ├── roc_curve*.png           # ROC curves for different models
 └── Readme.md                # Project documentation (this file)
 
+```
 ## Tech Stack
 
 **Language:**  
