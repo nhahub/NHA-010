@@ -130,20 +130,20 @@ NHA-010/
 ### Installation
 
 
-# 1. Clone the repository
+### 1. Clone the repository
 git clone https://github.com/nhahub/NHA-010.git
 cd NHA-010
 
-# 2. Create and activate a virtual environment (recommended)
+### 2. Create and activate a virtual environment (recommended)
 python -m venv .venv
 
-# On Linux / macOS:
+### On Linux / macOS:
 source .venv/bin/activate
 
-# On Windows:
-# .venv\Scripts\activate
+### On Windows:
+.venv\Scripts\activate
 
-# 3. Install dependencies
+## 3. Install dependencies
 pip install -r requirements.txt
 
 
@@ -151,34 +151,34 @@ pip install -r requirements.txt
 
 ## 1. Explore the Data (Notebooks)
 
-# Open notebooks to understand the workflow
+### Open notebooks to understand the workflow
 jupyter notebook notebooks/
 
-# Common notebooks:
-# 01_data_exploration.ipynb
-# 02_feature_engineering.ipynb
-# 03_model_training.ipynb
-# 04_model_evaluation.ipynb
+### Common notebooks:
+ 01_data_exploration.ipynb
+ 02_feature_engineering.ipynb
+ 03_model_training.ipynb
+ 04_model_evaluation.ipynb
 
-# Use these to:
-# - Inspect distributions & correlations
-# - Engineer features
-# - Train & compare models
+## Use these to:
+ - Inspect distributions & correlations
+ - Engineer features
+ - Train & compare models
 
 
 ## 2. Train Models
 
-# Run model comparison script
+### Run model comparison script
 python Run_models.py
 
-# Or run the main training pipeline
+### Or run the main training pipeline
 python main.py
 
-# These scripts:
-# - Load & clean data (data/raw/)
-# - Perform feature engineering (data/processed/)
-# - Train Logistic Regression, Gradient Boosting, XGBoost models
-# - Log metrics to mlruns/ and artifacts to models/
+### These scripts:
+ - Load & clean data (data/raw/)
+ - Perform feature engineering (data/processed/)
+ - Train Logistic Regression, Gradient Boosting, XGBoost models
+ - Log metrics to mlruns/ and artifacts to models/
 
 
 ## 3. Evaluate Models
