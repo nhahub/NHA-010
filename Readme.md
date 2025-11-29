@@ -71,7 +71,6 @@ The goal of this project is to:
 
 > Adjust this section if your actual structure differs.
 
-```text
 NHA-010/
 ├── api/                     # Backend API for model inference
 ├── data/
