@@ -91,3 +91,169 @@ NHA-010/
 ├── confusion_matrix*.png    # Confusion matrices for different models
 ├── roc_curve*.png           # ROC curves for different models
 └── Readme.md                # Project documentation (this file)
+
+## Tech Stack
+
+**Language:**  
+- Python 3.x  
+
+**Data & ML:**  
+- pandas  
+- NumPy  
+- scikit-learn  
+- xgboost  
+
+**Visualization:**  
+- Matplotlib  
+- Seaborn  
+
+**Experiment Tracking:**  
+- MLflow (`mlruns/`)  
+
+**Serving (API):**  
+- Flask / FastAPI (see `api/`)  
+
+**Notebooks:**  
+- Jupyter Notebook / JupyterLab  
+
+*(Update this list to match your exact dependencies and versions.)*
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Python 3.8+ (recommended)  
+- git  
+- (Optional) `virtualenv` or `conda` for environment management  
+
+### Installation
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/nhahub/NHA-010.git
+cd NHA-010
+
+# 2. Create and activate a virtual environment (recommended)
+python -m venv .venv
+
+# On Linux / macOS:
+source .venv/bin/activate
+
+# On Windows:
+# .venv\Scripts\activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+
+# How to Use
+
+## 1. Explore the Data (Notebooks)
+
+# Open notebooks to understand the workflow
+jupyter notebook notebooks/
+
+# Common notebooks:
+# 01_data_exploration.ipynb
+# 02_feature_engineering.ipynb
+# 03_model_training.ipynb
+# 04_model_evaluation.ipynb
+
+# Use these to:
+# - Inspect distributions & correlations
+# - Engineer features
+# - Train & compare models
+
+
+## 2. Train Models
+
+# Run model comparison script
+python Run_models.py
+
+# Or run the main training pipeline
+python main.py
+
+# These scripts:
+# - Load & clean data (data/raw/)
+# - Perform feature engineering (data/processed/)
+# - Train Logistic Regression, Gradient Boosting, XGBoost models
+# - Log metrics to mlruns/ and artifacts to models/
+
+
+## 3. Evaluate Models
+
+# Evaluation results include:
+# confusion_matrix.png
+# confusion_matrix_logreg.png
+# confusion_matrix_gradient_boosting.png
+# confusion_matrix_xgboost.png
+# roc_curve*.png
+
+# Also check notebooks/ and reports/ for evaluation & summaries.
+
+
+## 4. Serve Predictions via API
+
+# FastAPI (if used)
+uvicorn api.main:app --reload
+
+# Flask (if used)
+python api/app.py
+
+# Example prediction request:
+# POST /predict
+# Content-Type: application/json
+# {
+#   "tenure": 24,
+#   "monthly_charges": 75.5,
+#   "contract_type": "Month-to-month"
+# }
+
+
+## 5. Frontend (Optional)
+
+cd frontend
+# npm install
+# npm run dev     # or npm run build / npm start
+
+# Update UI docs with:
+# - How to start the UI
+# - Environment variables (API URL)
+# - Entry URL: http://localhost:3000
+
+
+## Experiment Tracking
+
+# MLflow runs are stored in mlruns/.
+mlflow ui --backend-store-uri mlruns
+
+# Then open:
+# http://127.0.0.1:5000
+
+
+## Reports
+
+# reports/ may include:
+# - EDA reports
+# - Model evaluation summaries
+# - Final project reports
+
+
+## Roadmap / Future Work
+
+# - Improve hyperparameter tuning (DONE)
+# - Add clearer documentation for API & frontend (DONE)
+# - Add automated tests
+# - Deploy model to cloud (Docker + provider)
+# - Add monitoring & auto retraining
+
+
+## Contributing
+
+# Fork repo, then:
+git checkout -b feature/my-feature
+git commit -m "Add my feature"
+git push origin feature/my-feature
+
+# Open a Pull Request
