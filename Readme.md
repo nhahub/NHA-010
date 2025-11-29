@@ -127,133 +127,136 @@ NHA-010/
 - git  
 - (Optional) `virtualenv` or `conda` for environment management  
 
-### Installation
 
+## Installation
 
 ### 1. Clone the repository
+```bash
 git clone https://github.com/nhahub/NHA-010.git
 cd NHA-010
+```
 
 ### 2. Create and activate a virtual environment (recommended)
+
+```
 python -m venv .venv
-
-### On Linux / macOS:
+```
+- On Linux / macOS:
+```
 source .venv/bin/activate
-
-### On Windows:
-.venv\Scripts\activate
-
-## 3. Install dependencies
-pip install -r requirements.txt
-
+```
 
 # How to Use
 
 ## 1. Explore the Data (Notebooks)
 
-### Open notebooks to understand the workflow
-jupyter notebook notebooks/
+Open the notebooks to understand the workflow:  
+Use `jupyter notebook notebooks/` to inspect:
 
-### Common notebooks:
- 01_data_exploration.ipynb
- 02_feature_engineering.ipynb
- 03_model_training.ipynb
- 04_model_evaluation.ipynb
+- `01_data_exploration.ipynb`
+- `02_feature_engineering.ipynb`
+- `03_model_training.ipynb`
+- `04_model_evaluation.ipynb`
 
-## Use these to:
- - Inspect distributions & correlations
- - Engineer features
- - Train & compare models
+These help you:
 
+- Inspect distributions and correlations  
+- Engineer features  
+- Train and compare models  
+
+---
 
 ## 2. Train Models
 
-### Run model comparison script
-python Run_models.py
+Run the model comparison script (`Run_models.py`) or the main training pipeline (`main.py`).
 
-### Or run the main training pipeline
-python main.py
+The training scripts will:
 
-### These scripts:
- - Load & clean data (data/raw/)
- - Perform feature engineering (data/processed/)
- - Train Logistic Regression, Gradient Boosting, XGBoost models
- - Log metrics to mlruns/ and artifacts to models/
+- Load and clean data (`data/raw/`)
+- Perform feature engineering (`data/processed/`)
+- Train Logistic Regression, Gradient Boosting, and XGBoost models
+- Log metrics to `mlruns/` and save artifacts to `models/`
 
+---
 
 ## 3. Evaluate Models
 
-# Evaluation results include:
-# confusion_matrix.png
-# confusion_matrix_logreg.png
-# confusion_matrix_gradient_boosting.png
-# confusion_matrix_xgboost.png
-# roc_curve*.png
+Evaluation outputs include:
 
-# Also check notebooks/ and reports/ for evaluation & summaries.
+- `confusion_matrix.png`
+- `confusion_matrix_logreg.png`
+- `confusion_matrix_gradient_boosting.png`
+- `confusion_matrix_xgboost.png`
+- `roc_curve*.png`
 
+Additional evaluation and summaries can be found in:
+
+- `notebooks/`
+- `reports/`
+
+---
 
 ## 4. Serve Predictions via API
 
-# FastAPI (if used)
-uvicorn api.main:app --reload
+FastAPI entry point: `uvicorn api.main:app --reload`  
+Flask entry point: `python api/app.py`
 
-# Flask (if used)
-python api/app.py
+### Example Prediction Request
 
-# Example prediction request:
-# POST /predict
-# Content-Type: application/json
-# {
-#   "tenure": 24,
-#   "monthly_charges": 75.5,
-#   "contract_type": "Month-to-month"
-# }
+POST `/predict` with JSON:
 
+```json
+{
+  "tenure": 24,
+  "monthly_charges": 75.5,
+  "contract_type": "Month-to-month"
+}
+```
 
-## 5. Frontend (Optional)
+## 5. Frontend 
 
-cd frontend
-# npm install
-# npm run dev     # or npm run build / npm start
+From the `frontend/` directory, open churn-predictor.html in your browser
 
-# Update UI docs with:
-# - How to start the UI
-# - Environment variables (API URL)
-# - Entry URL: http://localhost:3000
+Include UI documentation covering:
 
+- How to start the UI  
+- Required environment variables (API URL)  
+- Entry URL: <[http://localhost:8000] >
+
+---
 
 ## Experiment Tracking
 
-# MLflow runs are stored in mlruns/.
-mlflow ui --backend-store-uri mlruns
+MLflow runs are stored in the `mlruns/` directory.  
+Start the MLflow UI with `mlflow ui --backend-store-uri mlruns` and open it at <http://127.0.0.1:5000>.
 
-# Then open:
-# http://127.0.0.1:5000
-
+---
 
 ## Reports
 
-# reports/ may include:
-# - EDA reports
-# - Model evaluation summaries
-# - Final project reports
+The `reports/` directory may include:
 
+- EDA reports  
+- Model evaluation summaries  
+- Final project reports  
+
+---
 
 ## Roadmap / Future Work
 
-# - Improve hyperparameter tuning (DONE)
-# - Add clearer documentation for API & frontend (DONE)
-# - Add automated tests
-# - Deploy model to cloud (Docker + provider)
-# - Add monitoring & auto retraining
+- Improve hyperparameter tuning **(DONE)**  
+- Add clearer documentation for API & frontend **(DONE)**  
+- Add automated tests  
+- Deploy model to cloud (Docker + provider)  
+- Add monitoring & auto-retraining  
 
+---
 
 ## Contributing
 
-# Fork repo, then:
-git checkout -b feature/my-feature
-git commit -m "Add my feature"
-git push origin feature/my-feature
+Typical workflow:
 
-# Open a Pull Request
+1. Create a feature branch  
+2. Commit changes  
+3. Push the branch  
+4. Open a Pull Request  
